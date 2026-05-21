@@ -5,7 +5,7 @@
 [![Natural Language Processing](https://img.shields.io/badge/NLP-NLTK-green.svg)](https://www.nltk.org/)
 [![Machine Learning](https://img.shields.io/badge/ML-Scikit--Learn-F7931E.svg)](https://scikit-learn.org/)
 
-An end-to-end Machine Learning and Natural Language Processing (NLP) infrastructure engineered to analyze, process, and classify mobile text messages. Built from scratch on raw SMS communication data, this system translates chaotic text arrays into pristine numerical vectors, runs probabilistic statistical classification, and surfaces real-time predictions through an elegant, interactive Streamlit production dashboard.
+An end-to-end Machine Learning and Natural Language Processing (NLP) infrastructure engineered to analyze, process, and classify mobile text messages. Built from scratch on raw SMS communication data, this system translates chaotic text arrays into pristine numerical vectors, runs probabilistic statistical classification, and surfaces real-time predictions through an intuitive, interactive Streamlit production dashboard.
 
 ---
 
@@ -35,6 +35,24 @@ During model engineering inside `1.ipynb`, advanced custom structural features w
 
 ---
 
+## ⚠️ Challenges Faced & Engineering Solutions
+
+Building an end-to-end NLP product involves overlapping data engineering complexities. Below are the core roadblocks encountered during development and how they were systematically resolved:
+
+### 1. Structural Schema Inconsistencies & Dataset Cleaning
+* **The Problem:** The initial raw dataset was plagued with structural parsing errors. Unnamed, corrupt background arrays (`Unnamed: 2`, `Unnamed: 3`, `Unnamed: 4`) saturated the index layout, while arbitrary column headers threw off feature mapping. 
+* **The Solution:** Implemented a targeted pandas drop operation to isolate and purge the corrupted columns (`df.drop(...)`). Followed this by explicitly locking down the operational parameters to strict descriptors (`label` and `message`) to maintain clean data flow through the tokenization stage.
+
+### 2. High Class-Imbalance Friction
+* **The Problem:** Exploratory plotting revealed an overwhelming data distribution disparity: legitimate messages (**Ham**) significantly outnumbered malicious instances (**Spam**). Training standard models on such highly skewed distributions forces class classifiers to over-index on the majority class, leading to severe blindness toward spam signals.
+* **The Solution:** Leveraged an explicit data preprocessing strategy paired with a specialized **Bernoulli Naive Bayes** setup. By optimizing the decision engine around boolean text occurrences (word presence vs. absence flag arrays) rather than word volume frequency, the model built strict sensitivity limits for localized spam patterns despite the skewed data ratio.
+
+### 3. Markdown Documentation Mathjax Rendering Failures
+* **The Problem:** Documenting the system architecture math syntax directly inside the `README.md` caused unexpected layout breaking. GitHub's native Markdown parsing engine routinely misread standard inline mathematical operators (such as standalone formatting underscores `_` and inline percent signs `%`), creating broken pink error bars or forcing multi-line equations into scrambled, single-line blocks.
+* **The Solution:** Rewrote the layout configuration using isolated block dividers `$$...$$` paired with explicit `\begin{aligned} ... \end{aligned}` LaTeX structural tags. Swapped out conflict-prone variables for hyphenated syntax structures, forcing the background parser to bypass standard markdown formatting hooks and render complex arrays cleanly.
+
+---
+
 ## 🛠️ Mathematical Model Selection & Benchmarks
 
 The project shifts from experimental code to absolute production deployment by training and evaluating three distinct structural branches of Naive Bayes Classifiers using **Bag of Words (CountVectorizer)** feature extractions:
@@ -45,10 +63,10 @@ The project shifts from experimental code to absolute production deployment by t
 | **Multinomial Naive Bayes (`MultinomialNB`)** | 96.42% | 83.44% | **Sub-optimal:** Prone to high False-Positive rates. |
 | **Gaussian Naive Bayes (`GaussianNB`)** | 88.00% | 53.15% | **Failed Standard:** Struggles with sparse matrix arrays. |
 
-### 🔍 Why Bernoulli Naive Bayes Outperforms the Rest
-While standard text mining engines default to Multinomial tracking, the `BernoulliNB` architecture thrives here. Because SMS structures are incredibly brief, tracking **word occurrences** (presence vs. absence represented by boolean flags) maps far more cleanly to spam indicators than **word frequency counts**. 
+### 🔍 Operational Logic for Bernoulli Selection
+While standard text mining engines default to Multinomial tracking, the `BernoulliNB` architecture thrives here. Because SMS structures are brief, tracking whether key risk indicators exist or do not exist proves mathematically sounder than calculating arbitrary frequency distributions. 
 
-Most importantly, it maximizes **Precision**. In production email/SMS filters, marking a critical, real-time personal message as spam (a False Positive) causes immediate system friction. Our Bernoulli selection ensures that when a message is tagged as **🚨 SPAM**, the accuracy metric is almost definitive.
+Most importantly, it maximizes **Precision**. In production filters, marking a critical personal message as spam (a False Positive) causes major system friction. Our Bernoulli selection ensures that when a message is tagged as **🚨 SPAM**, the indicator is definitive.
 
 ---
 
