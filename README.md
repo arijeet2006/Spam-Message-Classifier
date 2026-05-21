@@ -47,10 +47,6 @@ Building an end-to-end NLP product involves overlapping data engineering complex
 * **The Problem:** Exploratory plotting revealed an overwhelming data distribution disparity: legitimate messages (**Ham**) significantly outnumbered malicious instances (**Spam**). Training standard models on such highly skewed distributions forces class classifiers to over-index on the majority class, leading to severe blindness toward spam signals.
 * **The Solution:** Leveraged an explicit data preprocessing strategy paired with a specialized **Bernoulli Naive Bayes** setup. By optimizing the decision engine around boolean text occurrences (word presence vs. absence flag arrays) rather than word volume frequency, the model built strict sensitivity limits for localized spam patterns despite the skewed data ratio.
 
-### 3. Markdown Documentation Mathjax Rendering Failures
-* **The Problem:** Documenting the system architecture math syntax directly inside the `README.md` caused unexpected layout breaking. GitHub's native Markdown parsing engine routinely misread standard inline mathematical operators (such as standalone formatting underscores `_` and inline percent signs `%`), creating broken pink error bars or forcing multi-line equations into scrambled, single-line blocks.
-* **The Solution:** Rewrote the layout configuration using isolated block dividers `$$...$$` paired with explicit `\begin{aligned} ... \end{aligned}` LaTeX structural tags. Swapped out conflict-prone variables for hyphenated syntax structures, forcing the background parser to bypass standard markdown formatting hooks and render complex arrays cleanly.
-
 ---
 
 ## 🛠️ Mathematical Model Selection & Benchmarks
